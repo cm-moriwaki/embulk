@@ -7,6 +7,7 @@ import java.util.Arrays;
 import java.util.ArrayList;
 import java.util.Comparator;
 import java.util.Collections;
+import java.util.HashMap;
 import com.google.common.collect.BiMap;
 import com.google.common.collect.HashBiMap;
 import io.airlift.slice.Slice;
@@ -34,6 +35,14 @@ public class PageBuilder
     private List<ImmutableValue> valueReferences = new ArrayList<>();
     private int referenceSize;
     private int nextVariableLengthDataOffset;
+
+    private Map<String, Object> meta = new HashMap<>();
+
+
+    public void setPageName(String name)
+    {
+        meta.put("name", name);
+    }
 
     public PageBuilder(BufferAllocator allocator, Schema schema, PageOutput output)
     {
@@ -223,7 +232,8 @@ public class PageBuilder
             // flush page
             Page page = Page.wrap(buffer)
                 .setStringReferences(getSortedStringReferences())
-                .setValueReferences(valueReferences);
+                .setValueReferences(valueReferences)
+                .setMeta(meta);
             buffer = null;
             bufferSlice = null;
             output.add(page);

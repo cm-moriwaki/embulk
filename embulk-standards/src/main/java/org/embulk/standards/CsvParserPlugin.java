@@ -253,6 +253,7 @@ public class CsvParserPlugin
                 }
 
                 while (true) {
+                    pageBuilder.setPageName(input.getName());
                     boolean hasNextRecord;
 
                     try {

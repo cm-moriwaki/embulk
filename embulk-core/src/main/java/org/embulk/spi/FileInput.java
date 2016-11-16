@@ -8,4 +8,8 @@ public interface FileInput
     Buffer poll();
 
     void close();
+
+    public default String getName() {
+        return null;
+    }
 }

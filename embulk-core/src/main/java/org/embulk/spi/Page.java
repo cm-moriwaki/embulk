@@ -1,6 +1,7 @@
 package org.embulk.spi;
 
 import java.util.List;
+import java.util.Map;
 import org.msgpack.value.ImmutableValue;
 
 public class Page
@@ -8,6 +9,8 @@ public class Page
     private final Buffer buffer;
     private List<String> stringReferences;
     private List<ImmutableValue> valueReferences;
+    private Map<String, Object> meta;
+
 
     protected Page(Buffer buffer)
     {
@@ -67,4 +70,22 @@ public class Page
     {
         return buffer;
     }
+
+    public Page addMeta(String key, Object value)
+    {
+        meta.put(key, value);
+        return this;
+    }
+
+    public Page setMeta(Map<String, Object> meta)
+    {
+        this.meta = meta;
+        return this;
+    }
+
+    public Map<String, Object> meta()
+    {
+        return this.meta;
+    }
+
 }
