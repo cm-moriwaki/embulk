@@ -108,4 +108,8 @@ public class FileInputInputStream
         releaseBuffer();
         in.close();
     }
+
+    public String getCurrentName() {
+        return in.getName();
+    }
 }

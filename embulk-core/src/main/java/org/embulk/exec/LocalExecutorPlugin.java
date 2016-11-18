@@ -68,6 +68,7 @@ public class LocalExecutorPlugin
         }
         else {
             log.info("Using local thread executor with max_threads={} / tasks={}", maxThreads, inputTaskCount);
+            log.info("Embulk+ mode");
             return new DirectExecutor(maxThreads, inputTaskCount);
         }
     }

@@ -17,6 +17,11 @@ public class InputStreamFileInput
         public InputStream openNext() throws IOException;
 
         public void close() throws IOException;
+
+        public default String getCurrentName()
+        {
+            return null;
+        }
     }
 
     public interface Opener
@@ -111,6 +116,13 @@ public class InputStreamFileInput
         }
     }
 
+    @Override
+    public String getName()
+    {
+        return this.currentName;
+    }
+
+    private String currentName;
     private final BufferAllocator allocator;
     private final Provider provider;
     private InputStream current;
@@ -120,6 +132,7 @@ public class InputStreamFileInput
         this.allocator = allocator;
         this.provider = provider;
         this.current = null;
+        this.currentName = null;
     }
 
     public InputStreamFileInput(BufferAllocator allocator, Opener opener)
@@ -163,8 +176,10 @@ public class InputStreamFileInput
             if (current != null) {
                 current.close();
                 current = null;
+                currentName = null;
             }
             current = provider.openNext();
+            currentName = provider.getCurrentName();
             return current != null;
         } catch (IOException ex) {
             throw new RuntimeException(ex);
@@ -178,6 +193,7 @@ public class InputStreamFileInput
                 if (current != null) {
                     current.close();
                     current = null;
+                    currentName = null;
                 }
             } finally {
                 provider.close();
